@@ -1,0 +1,140 @@
+/* Calendar Container (Tailwind: bg-white rounded-2xl shadow-sm p-5 mb-6 relative z-0) */
+.calendar-container {
+    background: white;
+    border-radius: 1rem;
+    /* 16px */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    /* shadow-sm */
+    padding: 1.25rem;
+    /* 20px */
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 0;
+    border: 1px solid #f0f0f0;
+}
+
+/* Grid Layout (Tailwind: grid grid-cols-7 gap-y-2 gap-x-1) */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    row-gap: 0.5rem;
+    column-gap: 0.25rem;
+}
+
+/* Day Headers */
+.calendar-day-header {
+    font-size: 0.75rem;
+    /* text-xs */
+    font-weight: 700;
+    /* font-bold */
+    text-align: center;
+    padding-bottom: 0.5rem;
+    color: #9ca3af;
+    /* text-gray-400 */
+}
+
+.calendar-day-header.sunday {
+    color: #f87171;
+    /* text-red-400 */
+}
+
+.calendar-day-header.saturday {
+    color: #60a5fa;
+    /* text-blue-400 */
+}
+
+/* Day Cell (Tailwind: relative aspect-square flex flex-col items-center justify-center rounded-xl cursor-pointer transition-all hover:bg-gray-50) */
+.calendar-day {
+    aspect-ratio: 1 / 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.75rem;
+    /* rounded-xl */
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+}
+
+.calendar-day:hover {
+    background-color: #f9fafb;
+    /* hover:bg-gray-50 */
+}
+
+/* Today Style */
+.calendar-day.today span {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-decoration-color: #9ca3af;
+    text-underline-offset: 4px;
+}
+
+/* Background Bubble (Tailwind: absolute inset-1 rounded-full) */
+.day-bubble {
+    position: absolute;
+    inset: 4px;
+    /* inset-1 */
+    border-radius: 9999px;
+    /* rounded-full */
+    z-index: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Life Commit Done Style (Orange Bubble) */
+.day-bubble.life-done {
+    background-color: #fff7ed;
+    /* bg-orange-50 */
+    border: 2px solid #ffcc80;
+    /* orange-200ish */
+}
+
+.day-bubble-inner {
+    width: 75%;
+    height: 75%;
+    border-radius: 9999px;
+    border: 2px solid #fb8c00;
+    /* orange-600 */
+    background-color: #fff3e0;
+    opacity: 0.3;
+}
+
+/* Text (Tailwind: relative z-10 text-sm font-medium leading-none) */
+.day-number {
+    position: relative;
+    z-index: 10;
+    font-size: 0.875rem;
+    /* text-sm */
+    font-weight: 500;
+    /* font-medium */
+    line-height: 1;
+    color: #374151;
+    /* text-gray-700 */
+}
+
+/* Contribution Dot (Mimicking Green Dot in reference) */
+.contribution-dot {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    z-index: 10;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #1a237e;
+    /* Navy */
+}
+
+/* Reserved Clock Icon (Mimic) */
+.reserved-icon {
+    position: absolute;
+    bottom: 4px;
+    z-index: 10;
+    font-size: 10px;
+    color: #eab308;
+    /* yellow-500 */
+    opacity: 0.7;
+}

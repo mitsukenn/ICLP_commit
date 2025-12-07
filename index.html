@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -8,698 +8,578 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #F4511E;
-            --primary-dark: #D84315;
-            --primary-light: #FF7043;
-            --blue: #1565C0;
-            --blue-dark: #0D47A1;
-            --blue-light: #1976D2;
-            --red: #FF5252;
-            --gray: #BDBDBD;
-            --bg: #FFFAF5;
-            --text: #333333;
-            --border: #E0E0E0;
-            --shadow: rgba(244, 81, 30, 0.15);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Noto Sans JP', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .app-container {
-            max-width: 800px;
-            margin: 0 auto;
-            min-height: 100vh;
-            background: white;
-            box-shadow: 0 0 60px rgba(0,0,0,0.08);
-        }
-
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
-            color: white;
-            padding: 1.5rem 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            border-radius: 50%;
-        }
-
-        .header-left {
-            position: relative;
-            z-index: 1;
-        }
-
-        .header-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2rem;
-            letter-spacing: 2px;
-            margin-bottom: 0.25rem;
-        }
-
-        .header-date {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-
-        .header-right {
-            position: relative;
-            z-index: 1;
-            text-align: right;
-        }
-
-        .countdown-item {
-            font-size: 0.8rem;
-            opacity: 0.95;
-            background: rgba(255,255,255,0.15);
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-weight: 700;
-            margin-bottom: 0.25rem;
-            display: inline-block;
-        }
-
-        /* Menu Bar */
-        .menu-bar {
-            background: white;
-            border-bottom: 2px solid var(--border);
-            padding: 0.75rem 1.5rem;
-            display: flex;
-            justify-content: flex-end;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .menu-btn {
-            background: var(--blue);
-            color: white;
-            border: none;
-            padding: 0.5rem 1.5rem;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Noto Sans JP', sans-serif;
-        }
-
-        .menu-btn:hover {
-            background: var(--blue-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(21, 101, 192, 0.3);
-        }
-
-        /* Content */
-        .content {
-            padding: 1.5rem;
-        }
-
-        /* Section */
-        .section {
-            background: white;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .section:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px var(--shadow);
-        }
-
-        .section-title {
-            font-weight: 900;
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .section-title.blue {
-            color: var(--blue);
-        }
-
-        .section-title.blue::before {
-            background: var(--blue);
-        }
-
-        .section-title::before {
-            content: '';
-            width: 4px;
-            height: 1.2rem;
-            background: var(--primary);
-            border-radius: 2px;
-        }
-
-        /* Declaration */
-        .declaration-box {
-            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
-            padding: 1.5rem;
-            border-radius: 8px;
-            border-left: 4px solid var(--blue);
-            margin-bottom: 1rem;
-        }
-
-        .declaration-box.fixed {
-            background: linear-gradient(135deg, #FFF5F0 0%, #FFEDE0 100%);
-            border-left-color: var(--primary);
-        }
-
-        .declaration-label {
-            font-weight: 700;
-            color: var(--blue);
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .declaration-label.orange {
-            color: var(--primary);
-        }
-
-        .declaration-text {
-            line-height: 1.8;
-            margin-bottom: 0.5rem;
-            white-space: pre-line;
-        }
-
-        .declaration-input {
-            display: inline-block;
-            border: none;
-            border-bottom: 2px solid var(--primary);
-            background: white;
-            padding: 0.25rem 0.5rem;
-            font-family: 'Noto Sans JP', sans-serif;
-            font-size: 1rem;
-            min-width: 200px;
-            margin: 0 0.25rem;
-        }
-
-        .declaration-input:focus {
-            outline: none;
-            border-bottom-color: var(--primary-dark);
-        }
-
-        .declaration-input-full {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            font-family: 'Noto Sans JP', sans-serif;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .declaration-input-full:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--shadow);
-        }
-
-        /* Input Group */
-        .input-group {
-            margin-bottom: 1rem;
-        }
-
-        .input-label {
-            display: block;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: var(--text);
-            font-size: 0.9rem;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            font-family: 'Noto Sans JP', sans-serif;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--shadow);
-        }
-
-        textarea.input-field {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        /* Life Commit List */
-        .commit-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .commit-item {
-            display: flex;
-            gap: 0.5rem;
-            align-items: stretch;
-        }
-
-        .commit-item textarea {
-            flex: 1;
-        }
-
-        .btn-remove {
-            padding: 0.5rem 1rem;
-            background: #f5f5f5;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 700;
-            color: #666;
-            transition: all 0.3s ease;
-        }
-
-        .btn-remove:hover {
-            background: #ffebee;
-            border-color: #f44336;
-            color: #f44336;
-        }
-
-        .btn-add {
-            padding: 0.75rem;
-            background: white;
-            border: 2px dashed var(--primary);
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 700;
-            color: var(--primary);
-            transition: all 0.3s ease;
-            width: 100%;
-            margin-top: 0.5rem;
-        }
-
-        .btn-add:hover {
-            background: rgba(244,81,30,0.05);
-        }
-
-        /* Buttons */
-        .btn {
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 8px;
-            font-family: 'Noto Sans JP', sans-serif;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            margin-top: 1rem;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            box-shadow: 0 4px 12px var(--shadow);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px var(--shadow);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
-        /* Completion Check */
-        .completion-grid {
-            display: grid;
-            gap: 1rem;
-        }
-
-        .completion-item {
-            background: var(--bg);
-            border-radius: 8px;
-            border: 2px solid var(--border);
-            padding: 1rem;
-        }
-
-        .completion-label {
-            font-weight: 700;
-            margin-bottom: 0.75rem;
-            display: block;
-        }
-
-        .completion-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
-        }
-
-        .completion-btn {
-            padding: 1rem;
-            border-radius: 8px;
-            border: 2px solid var(--border);
-            background: white;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            font-family: 'Noto Sans JP', sans-serif;
-        }
-
-        .completion-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .completion-btn.selected-yes {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: white;
-            transform: scale(1.02);
-        }
-
-        .completion-btn.selected-no {
-            background: #666;
-            border-color: #666;
-            color: white;
-            transform: scale(1.02);
-        }
-
-        /* Calendar */
-        .calendar-section {
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 3px solid var(--border);
-        }
-
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .calendar-nav {
-            background: transparent;
-            color: var(--text);
-            border: none;
-            width: 32px;
-            height: 32px;
-            cursor: pointer;
-            font-size: 1.5rem;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .calendar-nav:hover {
-            color: var(--blue);
-        }
-
-        .calendar-month-display {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .calendar-month {
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-
-        .calendar-total {
-            color: #999;
-            font-size: 0.9rem;
-        }
-
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 0;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .calendar-day-header {
-            text-align: center;
-            font-weight: 700;
-            font-size: 0.75rem;
-            padding: 0.75rem 0.25rem;
-            background: #f5f5f5;
-            color: #666;
-            border-right: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .calendar-day-header:nth-child(7) {
-            border-right: none;
-        }
-
-        .calendar-day-header.sunday {
-            color: #f44336;
-        }
-
-        .calendar-day-header.saturday {
-            color: var(--blue);
-        }
-
-        .calendar-day {
-            aspect-ratio: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-            background: white;
-            border-right: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-            font-size: 0.9rem;
-        }
-
-        .calendar-day:nth-child(7n) {
-            border-right: none;
-        }
-
-        .calendar-day:hover:not(.empty) {
-            background: #f5f5f5;
-        }
-
-        .calendar-day.empty {
-            cursor: default;
-            background: #fafafa;
-        }
-
-        .calendar-day.today {
-            background: #FFF3E0;
-            font-weight: 900;
-        }
-
-        .calendar-day.completed::after {
-            content: '○';
-            position: absolute;
-            bottom: 2px;
-            right: 4px;
-            font-size: 1rem;
-            color: var(--red);
-        }
-
-        .calendar-day.sunday {
-            color: #f44336;
-        }
-
-        .calendar-day.saturday {
-            color: var(--blue);
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.6);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
-            overflow-y: auto;
-        }
-
-        .modal.show {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            max-width: 600px;
-            width: 100%;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-            animation: modalSlideIn 0.3s ease;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        @keyframes modalSlideIn {
-            from { 
-                opacity: 0;
-                transform: translateY(-20px) scale(0.95);
-            }
-            to { 
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .modal-title {
-            font-weight: 900;
-            font-size: 1.3rem;
-            color: var(--blue);
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .breakdown-text {
-            background: linear-gradient(135deg, #FFF5F0 0%, #FFEDE0 100%);
-            padding: 1.5rem;
-            border-radius: 8px;
-            border-left: 4px solid var(--primary);
-            line-height: 1.9;
-            margin-bottom: 1.5rem;
-            font-size: 1.05rem;
-        }
-
-        .modal-btn {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            font-family: 'Noto Sans JP', sans-serif;
-        }
-
-        .modal-btn-secondary {
-            background: #f5f5f5;
-            color: var(--text);
-            margin-top: 0.5rem;
-        }
-
-        .declaration-period {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .current-declaration {
-            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 2px solid var(--blue-light);
-            margin-bottom: 1.5rem;
-        }
-
-        .declaration-period-badge {
-            display: inline-block;
-            background: var(--blue);
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            margin-bottom: 1rem;
-        }
-
-        /* Toast Notification */
-        .toast {
-            position: fixed;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: var(--primary);
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px var(--shadow);
-            opacity: 0;
-            transition: all 0.3s ease;
-            z-index: 1000;
-            font-weight: 700;
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        /* Responsive */
-        @media (max-width: 600px) {
-            .header {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .header-right {
-                text-align: left;
-            }
-
-            .header-title {
-                font-size: 1.8rem;
-            }
-
-            .countdown-item {
-                font-size: 0.75rem;
-                padding: 0.2rem 0.6rem;
-            }
-
-            .calendar-day {
-                font-size: 0.8rem;
-            }
-
-            .calendar-day.completed::after {
-                font-size: 0.8rem;
-                bottom: 1px;
-                right: 2px;
-            }
-        }
+:root {
+    --primary: #F4511E;
+    --primary-dark: #D84315;
+    --primary-light: #FF7043;
+    --accent: #1A237E;
+    /* Navy Blue */
+    --accent-light: #534BAE;
+    --text: #2D3436;
+    --text-light: #636E72;
+    --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    --card-bg: rgba(255, 255, 255, 0.85);
+    --card-border: rgba(255, 255, 255, 0.6);
+    --glass-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.05);
+    --border-radius: 16px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: #FAFAFA;
+    color: var(--text);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+}
+
+.app-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    position: relative;
+}
+
+/* Header */
+.header {
+    background: white;
+    color: var(--text);
+    padding: 2rem 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid #eee;
+}
+
+.header-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.header-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+    color: var(--primary);
+    margin-bottom: 0.25rem;
+    line-height: 1;
+}
+
+.header-date {
+    font-size: 1rem;
+    color: var(--text-light);
+    font-weight: 700;
+}
+
+.header-right {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.countdown-item {
+    font-size: 0.85rem;
+    background: #f5f5f5;
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    font-weight: 700;
+    color: var(--text-light);
+}
+
+/* Menu Bar */
+.menu-bar {
+    padding: 1rem 2.5rem;
+    display: flex;
+    justify-content: flex-end;
+    background: white;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.menu-btn {
+    background: transparent;
+    color: var(--accent);
+    border: 2px solid var(--accent);
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+.menu-btn:hover {
+    background: var(--accent);
+    color: white;
+}
+
+/* Content */
+.content {
+    padding: 1rem 2.5rem 3rem;
+}
+
+/* Section */
+.section {
+    background: white;
+    margin-bottom: 2.5rem;
+}
+
+.section-title {
+    font-weight: 900;
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.section-title::before {
+    content: '';
+    width: 4px;
+    height: 24px;
+    background: var(--primary);
+    border-radius: 2px;
+}
+
+.section-title.blue::before {
+    background: var(--accent);
+}
+
+/* Declaration */
+.declaration-box {
+    background: #FFF8F6;
+    /* Very light orange tint */
+    padding: 2rem;
+    border-radius: 16px;
+    border-left: none;
+    margin-bottom: 1.5rem;
+}
+
+.declaration-box.fixed {
+    background: #E8EAF6;
+    /* Very light navy tint */
+}
+
+.declaration-label {
+    font-weight: 900;
+    color: var(--primary);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.75rem;
+    display: block;
+}
+
+.declaration-label.orange {
+    color: var(--accent);
+}
+
+.declaration-text {
+    line-height: 2;
+    font-size: 1.1rem;
+    color: var(--text);
+    font-weight: 500;
+}
+
+.declaration-input {
+    border: none;
+    border-bottom: 2px solid var(--accent);
+    background: transparent;
+    padding: 0 0.5rem;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 200px;
+    text-align: center;
+}
+
+.declaration-input:focus {
+    outline: none;
+    border-bottom-color: var(--primary);
+}
+
+/* Forms */
+.input-label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+.input-field {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 1rem;
+    background: #fafafa;
+    transition: all 0.2s ease;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(244, 81, 30, 0.1);
+}
+
+textarea.input-field {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.btn-add {
+    width: 100%;
+    padding: 1rem;
+    background: white;
+    border: 2px dashed #ddd;
+    border-radius: 12px;
+    color: #999;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: all 0.2s;
+}
+
+.btn-add:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+/* Commit Items */
+.commit-item {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.btn-remove {
+    background: #ffebee;
+    color: #d32f2f;
+    border: none;
+    border-radius: 6px;
+    padding: 0 1rem;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.8rem;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 1.2rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(244, 81, 30, 0.3);
+    transition: all 0.2s;
+    margin-top: 2rem;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(244, 81, 30, 0.4);
+}
+
+/* Completion Check */
+.completion-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.completion-item {
+    text-align: center;
+}
+
+.completion-title {
+    display: block;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.completion-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    background: #f5f5f5;
+    padding: 0.5rem;
+    border-radius: 12px;
+}
+
+.completion-btn {
+    padding: 1rem;
+    border: none;
+    background: transparent;
+    font-weight: 700;
+    color: #999;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.completion-btn.selected-yes {
+    background: white;
+    color: var(--primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.completion-btn.selected-no {
+    background: white;
+    color: var(--text);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Calendar - Minimal Design */
+/* Calendar Container (Tailwind: bg-white rounded-2xl shadow-sm p-5 mb-6 relative z-0) */
+.calendar-container {
+    background: white;
+    border-radius: 1rem;
+    /* 16px */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    /* shadow-sm */
+    padding: 1.25rem;
+    /* 20px */
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 0;
+    border: 1px solid #f0f0f0;
+}
+
+/* Grid Layout (Tailwind: grid grid-cols-7 gap-y-2 gap-x-1) */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    row-gap: 0.5rem;
+    column-gap: 0.25rem;
+}
+
+/* Day Headers */
+.calendar-day-header {
+    font-size: 0.75rem;
+    /* text-xs */
+    font-weight: 700;
+    /* font-bold */
+    text-align: center;
+    padding-bottom: 0.5rem;
+    color: #9ca3af;
+    /* text-gray-400 */
+}
+
+.calendar-day-header.sunday {
+    color: #f87171;
+    /* text-red-400 */
+}
+
+.calendar-day-header.saturday {
+    color: #60a5fa;
+    /* text-blue-400 */
+}
+
+/* Day Cell (Tailwind: relative aspect-square flex flex-col items-center justify-center rounded-xl cursor-pointer transition-all hover:bg-gray-50) */
+.calendar-day {
+    aspect-ratio: 1 / 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.75rem;
+    /* rounded-xl */
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+}
+
+.calendar-day:hover {
+    background-color: #f9fafb;
+    /* hover:bg-gray-50 */
+}
+
+/* Today Style */
+.calendar-day.today span {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-decoration-color: #9ca3af;
+    text-underline-offset: 4px;
+}
+
+/* Background Bubble (Tailwind: absolute inset-1 rounded-full) */
+.day-bubble {
+    position: absolute;
+    inset: 4px;
+    /* inset-1 */
+    border-radius: 9999px;
+    /* rounded-full */
+    z-index: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Life Commit Done Style (Orange Bubble) */
+.day-bubble.life-done {
+    background-color: #fff7ed;
+    /* bg-orange-50 */
+    border: 2px solid #ffcc80;
+    /* orange-200ish */
+}
+
+.day-bubble-inner {
+    width: 75%;
+    height: 75%;
+    border-radius: 9999px;
+    border: 2px solid #fb8c00;
+    /* orange-600 */
+    background-color: #fff3e0;
+    opacity: 0.3;
+}
+
+/* Text (Tailwind: relative z-10 text-sm font-medium leading-none) */
+.day-number {
+    position: relative;
+    z-index: 10;
+    font-size: 0.875rem;
+    /* text-sm */
+    font-weight: 500;
+    /* font-medium */
+    line-height: 1;
+    color: #374151;
+    /* text-gray-700 */
+}
+
+/* Contribution Dot (Mimicking Green Dot in reference) */
+.contribution-dot {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    z-index: 10;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #1a237e;
+    /* Navy */
+}
+
+/* Reserved Clock Icon (Mimic) */
+.reserved-icon {
+    position: absolute;
+    bottom: 4px;
+    z-index: 10;
+    font-size: 10px;
+    color: #eab308;
+    /* yellow-500 */
+    opacity: 0.7;
+}
+
+/* Modal etc */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.modal-title {
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.modal-btn {
+    width: 100%;
+    padding: 1rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.modal-btn-secondary {
+    background: #eee;
+    color: var(--text);
+}
+
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: #333;
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 50px;
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 1000;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .app-container {
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .header,
+    .content {
+        padding: 1.5rem;
+    }
+
+    .completion-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+</style>
     </style>
 </head>
 <body>
@@ -1232,63 +1112,80 @@
         }
 
         function renderCalendar() {
-            const year = viewDate.getFullYear();
-            const month = viewDate.getMonth();
-            
-            document.getElementById('calendarMonth').textContent = 
-                `${year}年${month + 1}月`;
-            
-            const firstDay = new Date(year, month, 1);
-            const lastDay = new Date(year, month + 1, 0);
-            const daysInMonth = lastDay.getDate();
-            const startDayOfWeek = firstDay.getDay();
-            
-            const calendarDays = document.getElementById('calendarDays');
-            calendarDays.innerHTML = '';
-            
-            // Empty cells before first day
-            for (let i = 0; i < startDayOfWeek; i++) {
-                const emptyDay = document.createElement('div');
-                emptyDay.className = 'calendar-day empty';
-                calendarDays.appendChild(emptyDay);
-            }
-            
-            // Days of month
-            const data = getData();
-            const today = formatDate(currentDate);
-            let monthTotal = 0;
-            
-            for (let day = 1; day <= daysInMonth; day++) {
-                const date = new Date(year, month, day);
-                const dateKey = formatDate(date);
-                const dayData = data.dailyCommits[dateKey];
-                const dayOfWeek = date.getDay();
-                
-                const dayElement = document.createElement('div');
-                dayElement.className = 'calendar-day';
-                
-                if (dateKey === today) {
-                    dayElement.classList.add('today');
-                }
-                
-                if (dayOfWeek === 0) {
-                    dayElement.classList.add('sunday');
-                } else if (dayOfWeek === 6) {
-                    dayElement.classList.add('saturday');
-                }
-                
-                if (dayData?.lifeCompleted === true) {
-                    dayElement.classList.add('completed');
-                    monthTotal++;
-                }
-                
-                dayElement.textContent = day;
-                dayElement.onclick = () => showDayDetail(dateKey);
-                calendarDays.appendChild(dayElement);
-            }
-            
-            // Update total
-            document.getElementById('calendarTotal').textContent = `TOTAL: ${monthTotal}回`;
+    const year = viewDate.getFullYear();
+    const month = viewDate.getMonth();
+
+    // Year Month Header
+    document.getElementById('calendarMonth').textContent = `${year}年 ${month + 1}月`;
+
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    const startDayOfWeek = firstDay.getDay();
+
+    const calendarDays = document.getElementById('calendarDays');
+    calendarDays.innerHTML = '';
+
+    // Empty cells for padding
+    for (let i = 0; i < startDayOfWeek; i++) {
+        const emptyDay = document.createElement('div');
+        emptyDay.className = 'calendar-day empty';
+        calendarDays.appendChild(emptyDay);
+    }
+
+    const data = getData();
+    const today = formatDate(currentDate);
+    let monthTotal = 0;
+
+    for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(year, month, day);
+        const dateKey = formatDate(date);
+        const dayData = data.dailyCommits[dateKey];
+
+        // Main Cell
+        const dayElement = document.createElement('div');
+        dayElement.className = 'calendar-day';
+        dayElement.onclick = () => showDayDetail(dateKey);
+
+        // --- 1. Background Bubble (Life Commit) ---
+        const bubble = document.createElement('div');
+        bubble.className = 'status-bubble';
+        const isLifeDone = dayData?.lifeCompleted === true;
+
+        if (isLifeDone) {
+            bubble.classList.add('active'); // CSS handles the style
+            dayElement.classList.add('life-done'); // For text color change
+            monthTotal++;
+        }
+        dayElement.appendChild(bubble);
+
+        // --- 2. Date Number ---
+        const numberSpan = document.createElement('span');
+        numberSpan.className = 'day-number';
+        numberSpan.textContent = day;
+        dayElement.appendChild(numberSpan);
+
+        // Today Highlight
+        if (dateKey === today) {
+            dayElement.classList.add('today');
+        }
+
+        // --- 3. Contribution Dot (Bottom Right) ---
+        const isContributionDone = dayData?.contributionCompleted === true;
+        if (isContributionDone) {
+            const dot = document.createElement('div');
+            dot.className = 'status-dot';
+            dayElement.appendChild(dot);
+        }
+
+        calendarDays.appendChild(dayElement);
+    }
+
+    // Update Total Badge
+    document.getElementById('calendarTotal').textContent = `TOTAL: ${monthTotal}回`;
+}
+
+回`;
         }
 
         function showDayDetail(dateKey) {
@@ -1330,3 +1227,8 @@
     </script>
 </body>
 </html>
+
+
+
+
+
