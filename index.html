@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICLP コミット管理</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #F4511E;
+            --primary-dark: #D84315;
+            --primary-light: #FF7043;
+            --blue: #1565C0;
+            --blue-dark: #0D47A1;
+            --blue-light: #1976D2;
+            --red: #FF5252;
+            --gray: #BDBDBD;
+            --bg: #FFFAF5;
+            --text: #333333;
+            --border: #E0E0E0;
+            --shadow: rgba(244, 81, 30, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .app-container {
+            max-width: 800px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: white;
+            box-shadow: 0 0 60px rgba(0,0,0,0.08);
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+            color: white;
+            padding: 1.5rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .header-left {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            margin-bottom: 0.25rem;
+        }
+
+        .header-date {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .header-right {
+            position: relative;
+            z-index: 1;
+            text-align: right;
+        }
+
+        .countdown-item {
+            font-size: 0.8rem;
+            opacity: 0.95;
+            background: rgba(255,255,255,0.15);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            display: inline-block;
+        }
+
+        /* Menu Bar */
+        .menu-bar {
+            background: white;
+            border-bottom: 2px solid var(--border);
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            justify-content: flex-end;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .menu-btn {
+            background: var(--blue);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+
+        .menu-btn:hover {
+            background: var(--blue-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(21, 101, 192, 0.3);
+        }
+
+        /* Content */
+        .content {
+            padding: 1.5rem;
+        }
+
+        /* Section */
+        .section {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px var(--shadow);
+        }
+
+        .section-title {
+            font-weight: 900;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title.blue {
+            color: var(--blue);
+        }
+
+        .section-title.blue::before {
+            background: var(--blue);
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 1.2rem;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        /* Declaration */
+        .declaration-box {
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--blue);
+            margin-bottom: 1rem;
+        }
+
+        .declaration-box.fixed {
+            background: linear-gradient(135deg, #FFF5F0 0%, #FFEDE0 100%);
+            border-left-color: var(--primary);
+        }
+
+        .declaration-label {
+            font-weight: 700;
+            color: var(--blue);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .declaration-label.orange {
+            color: var(--primary);
+        }
+
+        .declaration-text {
+            line-height: 1.8;
+            margin-bottom: 0.5rem;
+            white-space: pre-line;
+        }
+
+        .declaration-input {
+            display: inline-block;
+            border: none;
+            border-bottom: 2px solid var(--primary);
+            background: white;
+            padding: 0.25rem 0.5rem;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 1rem;
+            min-width: 200px;
+            margin: 0 0.25rem;
+        }
+
+        .declaration-input:focus {
+            outline: none;
+            border-bottom-color: var(--primary-dark);
+        }
+
+        .declaration-input-full {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .declaration-input-full:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--shadow);
+        }
+
+        /* Input Group */
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--shadow);
+        }
+
+        textarea.input-field {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Life Commit List */
+        .commit-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .commit-item {
+            display: flex;
+            gap: 0.5rem;
+            align-items: stretch;
+        }
+
+        .commit-item textarea {
+            flex: 1;
+        }
+
+        .btn-remove {
+            padding: 0.5rem 1rem;
+            background: #f5f5f5;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .btn-remove:hover {
+            background: #ffebee;
+            border-color: #f44336;
+            color: #f44336;
+        }
+
+        .btn-add {
+            padding: 0.75rem;
+            background: white;
+            border: 2px dashed var(--primary);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            color: var(--primary);
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .btn-add:hover {
+            background: rgba(244,81,30,0.05);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* Completion Check */
+        .completion-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .completion-item {
+            background: var(--bg);
+            border-radius: 8px;
+            border: 2px solid var(--border);
+            padding: 1rem;
+        }
+
+        .completion-label {
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .completion-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .completion-btn {
+            padding: 1rem;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+            background: white;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+
+        .completion-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .completion-btn.selected-yes {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            transform: scale(1.02);
+        }
+
+        .completion-btn.selected-no {
+            background: #666;
+            border-color: #666;
+            color: white;
+            transform: scale(1.02);
+        }
+
+        /* Calendar */
+        .calendar-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 3px solid var(--border);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .calendar-nav {
+            background: transparent;
+            color: var(--text);
+            border: none;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .calendar-nav:hover {
+            color: var(--blue);
+        }
+
+        .calendar-month-display {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .calendar-month {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .calendar-total {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .calendar-day-header {
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 0.75rem 0.25rem;
+            background: #f5f5f5;
+            color: #666;
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .calendar-day-header:nth-child(7) {
+            border-right: none;
+        }
+
+        .calendar-day-header.sunday {
+            color: #f44336;
+        }
+
+        .calendar-day-header.saturday {
+            color: var(--blue);
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            background: white;
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        .calendar-day:nth-child(7n) {
+            border-right: none;
+        }
+
+        .calendar-day:hover:not(.empty) {
+            background: #f5f5f5;
+        }
+
+        .calendar-day.empty {
+            cursor: default;
+            background: #fafafa;
+        }
+
+        .calendar-day.today {
+            background: #FFF3E0;
+            font-weight: 900;
+        }
+
+        .calendar-day.completed::after {
+            content: '○';
+            position: absolute;
+            bottom: 2px;
+            right: 4px;
+            font-size: 1rem;
+            color: var(--red);
+        }
+
+        .calendar-day.sunday {
+            color: #f44336;
+        }
+
+        .calendar-day.saturday {
+            color: var(--blue);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            animation: modalSlideIn 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes modalSlideIn {
+            from { 
+                opacity: 0;
+                transform: translateY(-20px) scale(0.95);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-title {
+            font-weight: 900;
+            font-size: 1.3rem;
+            color: var(--blue);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .breakdown-text {
+            background: linear-gradient(135deg, #FFF5F0 0%, #FFEDE0 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            line-height: 1.9;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .modal-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+
+        .modal-btn-secondary {
+            background: #f5f5f5;
+            color: var(--text);
+            margin-top: 0.5rem;
+        }
+
+        .declaration-period {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .current-declaration {
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 2px solid var(--blue-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .declaration-period-badge {
+            display: inline-block;
+            background: var(--blue);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px var(--shadow);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            font-weight: 700;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .header-right {
+                text-align: left;
+            }
+
+            .header-title {
+                font-size: 1.8rem;
+            }
+
+            .countdown-item {
+                font-size: 0.75rem;
+                padding: 0.2rem 0.6rem;
+            }
+
+            .calendar-day {
+                font-size: 0.8rem;
+            }
+
+            .calendar-day.completed::after {
+                font-size: 0.8rem;
+                bottom: 1px;
+                right: 2px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1 class="header-title">ICLP COMMIT</h1>
+                <p class="header-date" id="currentDate"></p>
+            </div>
+            <div class="header-right">
+                <div class="countdown-item" id="nextEventCountdown"></div>
+                <div class="countdown-item" id="completionCountdown"></div>
+            </div>
+        </header>
+
+        <!-- Menu Bar -->
+        <div class="menu-bar">
+            <button class="menu-btn" onclick="openDeclarationSettings()">宣言を編集</button>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Declaration -->
+            <section class="section">
+                <h2 class="section-title">今日の宣言</h2>
+                
+                <!-- Declaration 1 -->
+                <div class="declaration-box" id="declaration1Display">
+                    <div class="declaration-label">宣言1（完全固定）</div>
+                    <div class="declaration-text" id="declaration1Text">
+                        宣言を設定してください
+                    </div>
+                </div>
+
+                <!-- Declaration 2 -->
+                <div class="declaration-box fixed">
+                    <div class="declaration-label orange">宣言2（一部固定）</div>
+                    <div class="declaration-text">
+                        私は重要です。<br>
+                        私は違いを創る人です。<br>
+                        私が違いを創るために手放すものは<br>
+                        <input type="text" class="declaration-input" id="handOver" placeholder="入力してください">です。
+                    </div>
+                </div>
+            </section>
+
+            <!-- Life Commit -->
+            <section class="section">
+                <h2 class="section-title">人生のコミット</h2>
+                <div class="input-label">やりたいこと・やるべきこと</div>
+                <div class="commit-list" id="lifeCommitList">
+                    <div class="commit-item">
+                        <textarea class="input-field" placeholder="例：新規顧客3社に提案する"></textarea>
+                    </div>
+                </div>
+                <button class="btn-add" onclick="addLifeCommit()">+ コミットを追加</button>
+            </section>
+
+            <!-- Contribution Commit -->
+            <section class="section">
+                <h2 class="section-title blue">貢献のコミット</h2>
+                <div class="input-group">
+                    <label class="input-label">誰に貢献するか</label>
+                    <input type="text" class="input-field" id="contributionWho" placeholder="例：竹内さん">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">何を意図するか</label>
+                    <textarea class="input-field" id="contributionIntent" placeholder="例：ICLPの進捗を共有し、次のステップを明確にする"></textarea>
+                </div>
+            </section>
+
+            <button class="btn btn-primary" onclick="saveCommits()">コミットを保存</button>
+
+            <!-- Completion Check -->
+            <section class="section" style="margin-top: 2rem;">
+                <h2 class="section-title">今日の完了チェック</h2>
+                <div class="completion-grid">
+                    <div class="completion-item">
+                        <span class="completion-label">やると言ったことを<br>人生のコミット</span>
+                        <div class="completion-buttons">
+                            <button class="completion-btn" onclick="setCompletion('life', true)">やった</button>
+                            <button class="completion-btn" onclick="setCompletion('life', false)">やらなかった</button>
+                        </div>
+                    </div>
+                    <div class="completion-item">
+                        <span class="completion-label">やると言ったことを<br>貢献のコミット</span>
+                        <div class="completion-buttons">
+                            <button class="completion-btn" onclick="setCompletion('contribution', true)">やった</button>
+                            <button class="completion-btn" onclick="setCompletion('contribution', false)">やらなかった</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="saveCompletion()">完了を記録</button>
+            </section>
+
+            <!-- Calendar -->
+            <div class="calendar-section">
+                <div class="calendar-header">
+                    <button class="calendar-nav" onclick="changeMonth(-1)">‹</button>
+                    <div class="calendar-month-display">
+                        <h2 class="calendar-month" id="calendarMonth"></h2>
+                        <span class="calendar-total" id="calendarTotal">TOTAL: 0回</span>
+                    </div>
+                    <button class="calendar-nav" onclick="changeMonth(1)">›</button>
+                </div>
+
+                <div class="calendar-grid">
+                    <div class="calendar-day-header sunday">日</div>
+                    <div class="calendar-day-header">月</div>
+                    <div class="calendar-day-header">火</div>
+                    <div class="calendar-day-header">水</div>
+                    <div class="calendar-day-header">木</div>
+                    <div class="calendar-day-header">金</div>
+                    <div class="calendar-day-header saturday">土</div>
+                    <div id="calendarDays"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Breakdown Modal -->
+    <div class="modal" id="breakdownModal">
+        <div class="modal-content">
+            <h3 class="modal-title">ブレイクダウン宣言</h3>
+            <div class="breakdown-text">
+                私はやると言った事をやりませんでした。<br>
+                私は私の言葉ではありませんでした。そしてそれ以上の意味はありません。<br>
+                ブレイクダウンとインテグリティアウトを私は承認します。<br>
+                そして私はパワフルです。
+            </div>
+            <button class="modal-btn" onclick="closeBreakdownModal()">承認する</button>
+        </div>
+    </div>
+
+    <!-- Declaration Settings Modal -->
+    <div class="modal" id="declarationModal">
+        <div class="modal-content">
+            <h3 class="modal-title">宣言の編集</h3>
+            
+            <div class="current-declaration" id="currentDeclaration1Display">
+                <div class="declaration-period-badge" id="currentPeriodBadge">期間未設定</div>
+                <div style="margin-bottom: 1rem;">
+                    <strong>現在の宣言1:</strong><br>
+                    <div id="currentDeclaration1TextDisplay" style="margin-top: 0.5rem; white-space: pre-line;">
+                        未設定
+                    </div>
+                </div>
+            </div>
+
+            <h4 style="margin-bottom: 1rem; font-weight: 700;">宣言1を編集</h4>
+            
+            <div class="declaration-period">
+                <div class="input-group">
+                    <label class="input-label">開始日</label>
+                    <input type="date" class="input-field" id="declaration1Start">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">終了日</label>
+                    <input type="date" class="input-field" id="declaration1End">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">宣言1の内容</label>
+                <textarea class="input-field" id="declaration1Input" placeholder="例：私たちICLP25は&#10;愛と感謝で無限の可能性を貢献するリーダーのチームです" rows="4"></textarea>
+            </div>
+
+            <button class="modal-btn" onclick="saveDeclaration1()">保存</button>
+            <button class="modal-btn modal-btn-secondary" onclick="closeDeclarationSettings()">キャンセル</button>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ICLP Events
+        const ICLP_EVENTS = [
+            { name: "第5週末", date: "2025-12-13" },
+            { name: "ワークデー", date: "2026-01-04" },
+            { name: "第6週末", date: "2026-02-07" },
+            { name: "ワークデー", date: "2026-03-08" },
+            { name: "第7週末", date: "2026-04-11" },
+            { name: "第8週末", date: "2026-05-09" },
+            { name: "完了セッション", date: "2026-06-19" }
+        ];
+
+        const COMPLETION_DATE = "2026-06-19";
+
+        // Data Storage
+        let currentDate = new Date();
+        let viewDate = new Date();
+        let completionState = {
+            life: null,
+            contribution: null
+        };
+        let breakdownShown = {
+            life: false,
+            contribution: false
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCurrentDate();
+            updateCountdown();
+            loadDeclaration1();
+            loadTodayData();
+            renderCalendar();
+        });
+
+        // Update Current Date
+        function updateCurrentDate() {
+            const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth() + 1;
+            const day = currentDate.getDate();
+            const weekday = weekdays[currentDate.getDay()];
+            
+            document.getElementById('currentDate').textContent = 
+                `${year}年${month}月${day}日(${weekday})`;
+        }
+
+        // Update Countdown
+        function updateCountdown() {
+            const today = formatDate(currentDate);
+            
+            // Find next event
+            const nextEvent = ICLP_EVENTS.find(event => event.date >= today);
+            
+            if (nextEvent) {
+                const daysUntil = calculateDaysDiff(today, nextEvent.date);
+                document.getElementById('nextEventCountdown').textContent = 
+                    `${nextEvent.name}まで: あと${daysUntil}日`;
+            }
+            
+            // Days until completion
+            const daysUntilCompletion = calculateDaysDiff(today, COMPLETION_DATE);
+            document.getElementById('completionCountdown').textContent = 
+                `完了日まで: あと${daysUntilCompletion}日`;
+        }
+
+        // Calculate Days Difference
+        function calculateDaysDiff(date1, date2) {
+            const d1 = new Date(date1);
+            const d2 = new Date(date2);
+            const diffTime = d2 - d1;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays;
+        }
+
+        // Format Date
+        function formatDate(date) {
+            return date.toISOString().split('T')[0];
+        }
+
+        // Get Data from LocalStorage
+        function getData() {
+            const data = localStorage.getItem('iclpData');
+            return data ? JSON.parse(data) : { 
+                declaration1: null,
+                dailyCommits: {} 
+            };
+        }
+
+        // Save Data to LocalStorage
+        function saveData(data) {
+            // Clean old data (older than 180 days)
+            const cutoffDate = new Date();
+            cutoffDate.setDate(cutoffDate.getDate() - 180);
+            const cutoffStr = formatDate(cutoffDate);
+            
+            Object.keys(data.dailyCommits).forEach(date => {
+                if (date < cutoffStr) {
+                    delete data.dailyCommits[date];
+                }
+            });
+            
+            localStorage.setItem('iclpData', JSON.stringify(data));
+        }
+
+        // Load Declaration 1
+        function loadDeclaration1() {
+            const data = getData();
+            const today = formatDate(currentDate);
+            
+            if (data.declaration1 && 
+                data.declaration1.startDate <= today && 
+                data.declaration1.endDate >= today) {
+                document.getElementById('declaration1Text').textContent = data.declaration1.text;
+            } else {
+                document.getElementById('declaration1Text').textContent = '宣言を設定してください';
+            }
+        }
+
+        // Open Declaration Settings
+        function openDeclarationSettings() {
+            const data = getData();
+            
+            if (data.declaration1) {
+                document.getElementById('currentPeriodBadge').textContent = 
+                    `${data.declaration1.startDate} 〜 ${data.declaration1.endDate}`;
+                document.getElementById('currentDeclaration1TextDisplay').textContent = 
+                    data.declaration1.text;
+                document.getElementById('declaration1Start').value = data.declaration1.startDate;
+                document.getElementById('declaration1End').value = data.declaration1.endDate;
+                document.getElementById('declaration1Input').value = data.declaration1.text;
+            } else {
+                document.getElementById('currentPeriodBadge').textContent = '期間未設定';
+                document.getElementById('currentDeclaration1TextDisplay').textContent = '未設定';
+                document.getElementById('declaration1Start').value = '';
+                document.getElementById('declaration1End').value = '';
+                document.getElementById('declaration1Input').value = '';
+            }
+            
+            document.getElementById('declarationModal').classList.add('show');
+        }
+
+        // Close Declaration Settings
+        function closeDeclarationSettings() {
+            document.getElementById('declarationModal').classList.remove('show');
+        }
+
+        // Save Declaration 1
+        function saveDeclaration1() {
+            const startDate = document.getElementById('declaration1Start').value;
+            const endDate = document.getElementById('declaration1End').value;
+            const text = document.getElementById('declaration1Input').value.trim();
+            
+            if (!startDate || !endDate || !text) {
+                showToast('すべての項目を入力してください');
+                return;
+            }
+            
+            if (startDate > endDate) {
+                showToast('終了日は開始日より後にしてください');
+                return;
+            }
+            
+            const data = getData();
+            data.declaration1 = {
+                text: text,
+                startDate: startDate,
+                endDate: endDate
+            };
+            
+            saveData(data);
+            loadDeclaration1();
+            closeDeclarationSettings();
+            showToast('宣言1を保存しました！');
+        }
+
+        // Add Life Commit
+        function addLifeCommit() {
+            const list = document.getElementById('lifeCommitList');
+            const newItem = document.createElement('div');
+            newItem.className = 'commit-item';
+            newItem.innerHTML = `
+                <textarea class="input-field" placeholder="やりたいこと・やるべきこと"></textarea>
+                <button class="btn-remove" onclick="removeLifeCommit(this)">削除</button>
+            `;
+            list.appendChild(newItem);
+        }
+
+        // Remove Life Commit
+        function removeLifeCommit(button) {
+            const list = document.getElementById('lifeCommitList');
+            if (list.children.length > 1) {
+                button.parentElement.remove();
+            } else {
+                showToast('最低1つのコミットは必要です');
+            }
+        }
+
+        // Load Today's Data
+        function loadTodayData() {
+            const data = getData();
+            const todayKey = formatDate(currentDate);
+            const todayData = data.dailyCommits[todayKey];
+            
+            if (todayData) {
+                document.getElementById('handOver').value = todayData.handOver || '';
+                document.getElementById('contributionWho').value = todayData.contributionWho || '';
+                document.getElementById('contributionIntent').value = todayData.contributionIntent || '';
+                
+                // Load life commits
+                const list = document.getElementById('lifeCommitList');
+                list.innerHTML = '';
+                
+                if (todayData.lifeCommit && todayData.lifeCommit.length > 0) {
+                    todayData.lifeCommit.forEach((commit, index) => {
+                        const item = document.createElement('div');
+                        item.className = 'commit-item';
+                        item.innerHTML = `
+                            <textarea class="input-field" placeholder="やりたいこと・やるべきこと">${commit}</textarea>
+                            ${index > 0 ? '<button class="btn-remove" onclick="removeLifeCommit(this)">削除</button>' : ''}
+                        `;
+                        list.appendChild(item);
+                    });
+                } else {
+                    list.innerHTML = `
+                        <div class="commit-item">
+                            <textarea class="input-field" placeholder="例：新規顧客3社に提案する"></textarea>
+                        </div>
+                    `;
+                }
+                
+                // Load completion state
+                if (todayData.lifeCompleted !== undefined) {
+                    completionState.life = todayData.lifeCompleted;
+                    updateCompletionButton('life', todayData.lifeCompleted);
+                }
+                
+                if (todayData.contributionCompleted !== undefined) {
+                    completionState.contribution = todayData.contributionCompleted;
+                    updateCompletionButton('contribution', todayData.contributionCompleted);
+                }
+            }
+        }
+
+        // Save Commits
+        function saveCommits() {
+            const handOver = document.getElementById('handOver').value.trim();
+            const contributionWho = document.getElementById('contributionWho').value.trim();
+            const contributionIntent = document.getElementById('contributionIntent').value.trim();
+            
+            // Collect life commits
+            const lifeCommits = [];
+            document.querySelectorAll('#lifeCommitList textarea').forEach(textarea => {
+                const value = textarea.value.trim();
+                if (value) {
+                    lifeCommits.push(value);
+                }
+            });
+            
+            if (lifeCommits.length === 0) {
+                showToast('最低1つの人生のコミットを入力してください');
+                return;
+            }
+            
+            const data = getData();
+            const todayKey = formatDate(currentDate);
+            
+            if (!data.dailyCommits[todayKey]) {
+                data.dailyCommits[todayKey] = {};
+            }
+            
+            data.dailyCommits[todayKey].handOver = handOver;
+            data.dailyCommits[todayKey].lifeCommit = lifeCommits;
+            data.dailyCommits[todayKey].contributionWho = contributionWho;
+            data.dailyCommits[todayKey].contributionIntent = contributionIntent;
+            data.dailyCommits[todayKey].timestamp = new Date().toISOString();
+            
+            saveData(data);
+            showToast('コミットを保存しました！');
+        }
+
+        // Set Completion
+        function setCompletion(type, value) {
+            completionState[type] = value;
+            updateCompletionButton(type, value);
+            
+            // Show breakdown modal if "やらなかった" is selected
+            if (value === false && !breakdownShown[type]) {
+                showBreakdownModal();
+                breakdownShown[type] = true;
+            }
+        }
+
+        // Update Completion Button
+        function updateCompletionButton(type, value) {
+            const completionItems = document.querySelectorAll('.completion-item');
+            const targetItem = type === 'life' ? completionItems[0] : completionItems[1];
+            const buttons = targetItem.querySelectorAll('.completion-btn');
+            
+            buttons.forEach(btn => {
+                btn.classList.remove('selected-yes', 'selected-no');
+            });
+            
+            if (value === true) {
+                buttons[0].classList.add('selected-yes');
+            } else if (value === false) {
+                buttons[1].classList.add('selected-no');
+            }
+        }
+
+        // Show Breakdown Modal
+        function showBreakdownModal() {
+            document.getElementById('breakdownModal').classList.add('show');
+        }
+
+        // Close Breakdown Modal
+        function closeBreakdownModal() {
+            document.getElementById('breakdownModal').classList.remove('show');
+        }
+
+        // Save Completion
+        function saveCompletion() {
+            if (completionState.life === null || completionState.contribution === null) {
+                showToast('両方の完了状態を選択してください');
+                return;
+            }
+            
+            const data = getData();
+            const todayKey = formatDate(currentDate);
+            
+            if (!data.dailyCommits[todayKey]) {
+                showToast('先にコミットを保存してください');
+                return;
+            }
+            
+            data.dailyCommits[todayKey].lifeCompleted = completionState.life;
+            data.dailyCommits[todayKey].contributionCompleted = completionState.contribution;
+            data.dailyCommits[todayKey].completionTimestamp = new Date().toISOString();
+            
+            saveData(data);
+            showToast('完了を記録しました！');
+            
+            // Reset breakdown shown flags for next time
+            breakdownShown = { life: false, contribution: false };
+            
+            // Refresh calendar
+            renderCalendar();
+        }
+
+        // Calendar Functions
+        function changeMonth(direction) {
+            viewDate.setMonth(viewDate.getMonth() + direction);
+            renderCalendar();
+        }
+
+        function renderCalendar() {
+            const year = viewDate.getFullYear();
+            const month = viewDate.getMonth();
+            
+            document.getElementById('calendarMonth').textContent = 
+                `${year}年${month + 1}月`;
+            
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startDayOfWeek = firstDay.getDay();
+            
+            const calendarDays = document.getElementById('calendarDays');
+            calendarDays.innerHTML = '';
+            
+            // Empty cells before first day
+            for (let i = 0; i < startDayOfWeek; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day empty';
+                calendarDays.appendChild(emptyDay);
+            }
+            
+            // Days of month
+            const data = getData();
+            const today = formatDate(currentDate);
+            let monthTotal = 0;
+            
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(year, month, day);
+                const dateKey = formatDate(date);
+                const dayData = data.dailyCommits[dateKey];
+                const dayOfWeek = date.getDay();
+                
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                
+                if (dateKey === today) {
+                    dayElement.classList.add('today');
+                }
+                
+                if (dayOfWeek === 0) {
+                    dayElement.classList.add('sunday');
+                } else if (dayOfWeek === 6) {
+                    dayElement.classList.add('saturday');
+                }
+                
+                if (dayData?.lifeCompleted === true) {
+                    dayElement.classList.add('completed');
+                    monthTotal++;
+                }
+                
+                dayElement.textContent = day;
+                dayElement.onclick = () => showDayDetail(dateKey);
+                calendarDays.appendChild(dayElement);
+            }
+            
+            // Update total
+            document.getElementById('calendarTotal').textContent = `TOTAL: ${monthTotal}回`;
+        }
+
+        function showDayDetail(dateKey) {
+            const data = getData();
+            const dayData = data.dailyCommits[dateKey];
+            
+            if (!dayData) {
+                showToast('この日の記録はありません');
+                return;
+            }
+            
+            const lifeCommitText = dayData.lifeCommit?.join('\n・ ') || 'なし';
+            const message = `【${dateKey}】
+
+手放すもの: ${dayData.handOver || 'なし'}
+
+人生のコミット:
+・ ${lifeCommitText}
+
+貢献のコミット:
+誰に: ${dayData.contributionWho || 'なし'}
+何を: ${dayData.contributionIntent || 'なし'}
+
+完了: 人生${dayData.lifeCompleted ? '○' : '×'} / 貢献${dayData.contributionCompleted ? '○' : '×'}`;
+            
+            alert(message);
+        }
+
+        // Toast
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
