@@ -1,613 +1,132 @@
 ﻿<!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ICLP コミット管理</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
-    <style>
-:root {
-    --primary: #F4511E;
-    --primary-dark: #D84315;
-    --primary-light: #FF7043;
-    --accent: #1A237E;
-    /* Navy Blue */
-    --accent-light: #534BAE;
-    --text: #2D3436;
-    --text-light: #636E72;
-    --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    --card-bg: rgba(255, 255, 255, 0.85);
-    --card-border: rgba(255, 255, 255, 0.6);
-    --glass-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.05);
-    --border-radius: 16px;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Noto Sans JP', sans-serif;
-    background: #FAFAFA;
-    color: var(--text);
-    line-height: 1.7;
-    -webkit-font-smoothing: antialiased;
-    min-height: 100vh;
-    padding: 2rem 1rem;
-}
-
-.app-container {
-    max-width: 800px;
-    margin: 0 auto;
-    background: white;
-    border-radius: 24px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
-    position: relative;
-}
-
-/* Header */
-.header {
-    background: white;
-    color: var(--text);
-    padding: 2rem 2.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    border-bottom: 1px solid #eee;
-}
-
-.header-left {
-    display: flex;
-    flex-direction: column;
-}
-
-.header-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.5rem;
-    letter-spacing: 2px;
-    color: var(--primary);
-    margin-bottom: 0.25rem;
-    line-height: 1;
-}
-
-.header-date {
-    font-size: 1rem;
-    color: var(--text-light);
-    font-weight: 700;
-}
-
-.header-right {
-    text-align: right;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.countdown-item {
-    font-size: 0.85rem;
-    background: #f5f5f5;
-    padding: 0.4rem 1rem;
-    border-radius: 50px;
-    font-weight: 700;
-    color: var(--text-light);
-}
-
-/* Menu Bar */
-.menu-bar {
-    padding: 1rem 2.5rem;
-    display: flex;
-    justify-content: flex-end;
-    background: white;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-
-.menu-btn {
-    background: transparent;
-    color: var(--accent);
-    border: 2px solid var(--accent);
-    padding: 0.5rem 1.5rem;
-    border-radius: 50px;
-    font-weight: 700;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-family: 'Noto Sans JP', sans-serif;
-}
-
-.menu-btn:hover {
-    background: var(--accent);
-    color: white;
-}
-
-/* Content */
-.content {
-    padding: 1rem 2.5rem 3rem;
-}
-
-/* Section */
-.section {
-    background: white;
-    margin-bottom: 2.5rem;
-}
-
-.section-title {
-    font-weight: 900;
-    font-size: 1.25rem;
-    margin-bottom: 1.5rem;
-    color: var(--text);
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.section-title::before {
-    content: '';
-    width: 4px;
-    height: 24px;
-    background: var(--primary);
-    border-radius: 2px;
-}
-
-.section-title.blue::before {
-    background: var(--accent);
-}
-
-/* Declaration */
-.declaration-box {
-    background: #FFF8F6;
-    /* Very light orange tint */
-    padding: 2rem;
-    border-radius: 16px;
-    border-left: none;
-    margin-bottom: 1.5rem;
-}
-
-.declaration-box.fixed {
-    background: #E8EAF6;
-    /* Very light navy tint */
-}
-
-.declaration-label {
-    font-weight: 900;
-    color: var(--primary);
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 0.75rem;
-    display: block;
-}
-
-.declaration-label.orange {
-    color: var(--accent);
-}
-
-.declaration-text {
-    line-height: 2;
-    font-size: 1.1rem;
-    color: var(--text);
-    font-weight: 500;
-}
-
-.declaration-input {
-    border: none;
-    border-bottom: 2px solid var(--accent);
-    background: transparent;
-    padding: 0 0.5rem;
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--accent);
-    min-width: 200px;
-    text-align: center;
-}
-
-.declaration-input:focus {
-    outline: none;
-    border-bottom-color: var(--primary);
-}
-
-/* Forms */
-.input-label {
-    display: block;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    color: var(--text);
-    font-size: 0.9rem;
-}
-
-.input-field {
-    width: 100%;
-    padding: 1rem;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 1rem;
-    background: #fafafa;
-    transition: all 0.2s ease;
-}
-
-.input-field:focus {
-    outline: none;
-    border-color: var(--primary);
-    background: white;
-    box-shadow: 0 0 0 3px rgba(244, 81, 30, 0.1);
-}
-
-textarea.input-field {
-    resize: vertical;
-    min-height: 80px;
-}
-
-.btn-add {
-    width: 100%;
-    padding: 1rem;
-    background: white;
-    border: 2px dashed #ddd;
-    border-radius: 12px;
-    color: #999;
-    font-weight: 700;
-    cursor: pointer;
-    margin-top: 1rem;
-    transition: all 0.2s;
-}
-
-.btn-add:hover {
-    border-color: var(--primary);
-    color: var(--primary);
-}
-
-/* Commit Items */
-.commit-item {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.btn-remove {
-    background: #ffebee;
-    color: #d32f2f;
-    border: none;
-    border-radius: 6px;
-    padding: 0 1rem;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 0.8rem;
-}
-
-.btn-primary {
-    width: 100%;
-    padding: 1.2rem;
-    background: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 50px;
-    font-size: 1.1rem;
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(244, 81, 30, 0.3);
-    transition: all 0.2s;
-    margin-top: 2rem;
-}
-
-.btn-primary:hover {
-    background: var(--primary-dark);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(244, 81, 30, 0.4);
-}
-
-/* Completion Check */
-.completion-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-}
-
-.completion-item {
-    text-align: center;
-}
-
-.completion-title {
-    display: block;
-    margin-bottom: 1rem;
-    font-weight: 700;
-}
-
-.completion-buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    background: #f5f5f5;
-    padding: 0.5rem;
-    border-radius: 12px;
-}
-
-.completion-btn {
-    padding: 1rem;
-    border: none;
-    background: transparent;
-    font-weight: 700;
-    color: #999;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.completion-btn.selected-yes {
-    background: white;
-    color: var(--primary);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.completion-btn.selected-no {
-    background: white;
-    color: var(--text);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Calendar - Minimal Design */
-/* Calendar Container (Tailwind: bg-white rounded-2xl shadow-sm p-5 mb-6 relative z-0) */
-.calendar-container {
-    background: white;
-    border-radius: 1rem;
-    /* 16px */
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    /* shadow-sm */
-    padding: 1.25rem;
-    /* 20px */
-    margin-bottom: 1.5rem;
-    position: relative;
-    z-index: 0;
-    border: 1px solid #f0f0f0;
-}
-
-/* Grid Layout (Tailwind: grid grid-cols-7 gap-y-2 gap-x-1) */
-.calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    row-gap: 0.5rem;
-    column-gap: 0.25rem;
-}
-
-/* Day Headers */
-.calendar-day-header {
-    font-size: 0.75rem;
-    /* text-xs */
-    font-weight: 700;
-    /* font-bold */
-    text-align: center;
-    padding-bottom: 0.5rem;
-    color: #9ca3af;
-    /* text-gray-400 */
-}
-
-.calendar-day-header.sunday {
-    color: #f87171;
-    /* text-red-400 */
-}
-
-.calendar-day-header.saturday {
-    color: #60a5fa;
-    /* text-blue-400 */
-}
-
-/* Day Cell (Tailwind: relative aspect-square flex flex-col items-center justify-center rounded-xl cursor-pointer transition-all hover:bg-gray-50) */
-.calendar-day {
-    aspect-ratio: 1 / 1;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border-radius: 0.75rem;
-    /* rounded-xl */
-    cursor: pointer;
-    transition: all 0.2s;
-    background: transparent;
-}
-
-.calendar-day:hover {
-    background-color: #f9fafb;
-    /* hover:bg-gray-50 */
-}
-
-/* Today Style */
-.calendar-day.today span {
-    text-decoration: underline;
-    text-decoration-thickness: 2px;
-    text-decoration-color: #9ca3af;
-    text-underline-offset: 4px;
-}
-
-/* Background Bubble (Tailwind: absolute inset-1 rounded-full) */
-.day-bubble {
-    position: absolute;
-    inset: 4px;
-    /* inset-1 */
-    border-radius: 9999px;
-    /* rounded-full */
-    z-index: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Life Commit Done Style (Orange Bubble) */
-.day-bubble.life-done {
-    background-color: #fff7ed;
-    /* bg-orange-50 */
-    border: 2px solid #ffcc80;
-    /* orange-200ish */
-}
-
-.day-bubble-inner {
-    width: 75%;
-    height: 75%;
-    border-radius: 9999px;
-    border: 2px solid #fb8c00;
-    /* orange-600 */
-    background-color: #fff3e0;
-    opacity: 0.3;
-}
-
-/* Text (Tailwind: relative z-10 text-sm font-medium leading-none) */
-.day-number {
-    position: relative;
-    z-index: 10;
-    font-size: 0.875rem;
-    /* text-sm */
-    font-weight: 500;
-    /* font-medium */
-    line-height: 1;
-    color: #374151;
-    /* text-gray-700 */
-}
-
-/* Contribution Dot (Mimicking Green Dot in reference) */
-.contribution-dot {
-    position: absolute;
-    bottom: 4px;
-    right: 4px;
-    z-index: 10;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background-color: #1a237e;
-    /* Navy */
-}
-
-/* Reserved Clock Icon (Mimic) */
-.reserved-icon {
-    position: absolute;
-    bottom: 4px;
-    z-index: 10;
-    font-size: 10px;
-    color: #eab308;
-    /* yellow-500 */
-    opacity: 0.7;
-}
-
-/* Modal etc */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-    padding: 1rem;
-}
-
-.modal.show {
-    display: flex;
-}
-
-.modal-content {
-    background: white;
-    padding: 2rem;
-    border-radius: 16px;
-    max-width: 500px;
-    width: 100%;
-}
-
-.modal-title {
-    font-weight: 700;
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
-}
-
-.modal-btn {
-    width: 100%;
-    padding: 1rem;
-    background: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: 700;
-    cursor: pointer;
-    margin-top: 1rem;
-}
-
-.modal-btn-secondary {
-    background: #eee;
-    color: var(--text);
-}
-
-.toast {
-    position: fixed;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: #333;
-    color: white;
-    padding: 0.75rem 2rem;
-    border-radius: 50px;
-    opacity: 0;
-    transition: all 0.3s;
-    z-index: 1000;
-}
-
-.toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-    .app-container {
-        border-radius: 0;
-        box-shadow: none;
-    }
-
-    .header,
-    .content {
-        padding: 1.5rem;
-    }
-
-    .completion-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-</style>
-    </style>
+    <link rel="preload" as="style"
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Bebas+Neue&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Bebas+Neue&display=swap"
+        rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Bebas+Neue&display=swap"
+            rel="stylesheet">
+    </noscript>
+    <link rel="apple-touch-icon" sizes="180x180" href="ICLP-icon.png">
+<link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <div class="app-container">
-        <!-- Header -->
         <header class="header">
             <div class="header-left">
                 <h1 class="header-title">ICLP COMMIT</h1>
                 <p class="header-date" id="currentDate"></p>
+                <div id="weeklyCommitHeader" class="weekly-commit-container" style="display: none;">
+                    <div class="weekly-commit-header weekly-commit-box" id="weeklyLifeCommitHeader">
+                        <div class="weekly-commit-header-label">今週の人生コミット🎯</div>
+                        <div class="weekly-commit-header-text" id="weeklyCommitHeaderTextLife"></div>
+                    </div>
+                    <div class="weekly-commit-header weekly-commit-box" id="weeklyContributionCommitHeader">
+                        <div class="weekly-commit-header-label">今週の貢献コミット👐</div>
+                        <div class="weekly-commit-header-text" id="weeklyCommitHeaderTextContribution"></div>
+                    </div>
+                </div>
             </div>
             <div class="header-right">
+                <div style="height: 0.25rem;"></div>
                 <div class="countdown-item" id="nextEventCountdown"></div>
                 <div class="countdown-item" id="completionCountdown"></div>
             </div>
         </header>
 
-        <!-- Menu Bar -->
         <div class="menu-bar">
-            <button class="menu-btn" onclick="openDeclarationSettings()">宣言を編集</button>
+            <div class="streak-info">
+                <div class="streak-badge fire">
+                    <span>🔥</span>
+                    <span id="currentStreak">連続: 0日</span>
+                </div>
+                <div class="streak-badge trophy">
+                    <span>🏆</span>
+                    <span id="maxStreak">最長: 0日</span>
+                </div>
+            </div>
         </div>
 
-        <!-- Content -->
         <div class="content">
-            <!-- Declaration -->
+            <section class="section weekly-commit-section" id="weeklyCommitInputSection" style="display: none;">
+                <h2 class="section-title">
+                    📅 今週のコミット
+                    <span class="weekly-period-badge" id="weeklyPeriodBadge"></span>
+                </h2>
+
+                <div class="input-group">
+                    <label class="input-label">人生のコミット（今週やること）</label>
+                    <div class="commit-list" id="weeklyLifeCommitList">
+                        <div class="commit-item">
+                            <textarea class="input-field auto-resize" placeholder="今週達成したいこと..."></textarea>
+                        </div>
+                    </div>
+                    <button class="btn-add" onclick="addWeeklyLifeCommit()">+ コミットを追加</button>
+                </div>
+
+                <div class="input-group" style="margin-top: 1rem;">
+                    <label class="input-label">貢献のコミット（誰に・意図）</label>
+                    <textarea class="input-field auto-resize" id="weeklyContributionContent"
+                        placeholder="今週の貢献のコミット..."></textarea>
+                </div>
+
+                <button class="btn btn-primary btn-weekly" onclick="saveWeeklyCommits()">週間コミットを保存</button>
+            </section>
+
+            <section class="section weekly-commit-section" id="weeklyCompletionSection" style="display: none;">
+                <h2 class="section-title">
+                    📅 週間コミットの完了チェック
+                    <span class="weekly-period-badge" id="weeklyCompletionPeriodBadge"></span>
+                </h2>
+
+                <div class="weekly-commit-display">
+                    <div class="weekly-commit-display-label">人生のコミット</div>
+                    <div class="weekly-commit-display-text" id="weeklyLifeCommitDisplay">未設定</div>
+                </div>
+                <div class="weekly-commit-display">
+                    <div class="weekly-commit-display-label">貢献のコミット</div>
+                    <div class="weekly-commit-display-text" id="weeklyContributionDisplay">未設定</div>
+                </div>
+
+                <div class="completion-grid">
+                    <div class="completion-item">
+                        <span class="completion-label">人生のコミット：やると言ったことを</span>
+                        <div class="completion-buttons">
+                            <button class="completion-btn" onclick="setWeeklyCompletion('life', true)">やった</button>
+                            <button class="completion-btn" onclick="setWeeklyCompletion('life', false)">やらなかった</button>
+                        </div>
+                    </div>
+                    <div class="completion-item">
+                        <span class="completion-label">貢献のコミット：やると言ったことを</span>
+                        <div class="completion-buttons">
+                            <button class="completion-btn"
+                                onclick="setWeeklyCompletion('contribution', true)">やった</button>
+                            <button class="completion-btn"
+                                onclick="setWeeklyCompletion('contribution', false)">やらなかった</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-weekly" onclick="saveWeeklyCompletion()">週間の完了を記録</button>
+            </section>
+
             <section class="section">
-                <h2 class="section-title">今日の宣言</h2>
-                
-                <!-- Declaration 1 -->
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                    <h2 class="section-title" style="margin-bottom: 0;">今日の宣言</h2>
+                    <button class="menu-btn" onclick="openDeclarationSettings()"
+                        style="padding: 0.35rem 1rem; font-size: 0.8rem;">宣言を編集</button>
+                </div>
+
                 <div class="declaration-box" id="declaration1Display">
                     <div class="declaration-label">宣言1（完全固定）</div>
                     <div class="declaration-text" id="declaration1Text">
@@ -615,114 +134,124 @@ textarea.input-field {
                     </div>
                 </div>
 
-                <!-- Declaration 2 -->
                 <div class="declaration-box fixed">
                     <div class="declaration-label orange">宣言2（一部固定）</div>
-                    <div class="declaration-text">
-                        私は重要です。<br>
-                        私は違いを創る人です。<br>
-                        私が違いを創るために手放すものは<br>
-                        <input type="text" class="declaration-input" id="handOver" placeholder="入力してください">です。
+                    <div class="declaration-text" id="declaration2Text">
+                        私は重要です。私は違いを創る人です。私が違いを創るために手放すものは<input type="text" class="declaration-input" id="handOver">です。
                     </div>
                 </div>
             </section>
 
-            <!-- Life Commit -->
             <section class="section">
-                <h2 class="section-title">人生のコミット</h2>
-                <div class="input-label">やりたいこと・やるべきこと</div>
+                <h2 class="section-title">人生のコミット　やりたいこと・やるべきこと</h2>
                 <div class="commit-list" id="lifeCommitList">
                     <div class="commit-item">
-                        <textarea class="input-field" placeholder="例：新規顧客3社に提案する"></textarea>
+                        <textarea class="input-field auto-resize"></textarea>
                     </div>
                 </div>
                 <button class="btn-add" onclick="addLifeCommit()">+ コミットを追加</button>
             </section>
 
-            <!-- Contribution Commit -->
             <section class="section">
                 <h2 class="section-title blue">貢献のコミット</h2>
                 <div class="input-group">
-                    <label class="input-label">誰に貢献するか</label>
-                    <input type="text" class="input-field" id="contributionWho" placeholder="例：竹内さん">
-                </div>
-                <div class="input-group">
-                    <label class="input-label">何を意図するか</label>
-                    <textarea class="input-field" id="contributionIntent" placeholder="例：ICLPの進捗を共有し、次のステップを明確にする"></textarea>
+                    <div style="display: flex; align-items: flex-start; gap: 0.5rem;">
+                        <label class="input-label"
+                            style="margin-bottom: 0; white-space: nowrap; min-width: fit-content; padding-top: 0.5rem;">誰に・意図：</label>
+                        <textarea class="input-field auto-resize" id="contributionContent"></textarea>
+                    </div>
                 </div>
             </section>
 
             <button class="btn btn-primary" onclick="saveCommits()">コミットを保存</button>
 
-            <!-- Completion Check -->
-            <section class="section" style="margin-top: 2rem;">
-                <h2 class="section-title">今日の完了チェック</h2>
+            <section class="section" style="margin-top: 1.5rem; display: none;" id="dailyCompletionSection">
+                <h2 class="section-title blue">今日の完了チェック</h2>
                 <div class="completion-grid">
                     <div class="completion-item">
-                        <span class="completion-label">やると言ったことを<br>人生のコミット</span>
+                        <span class="completion-label">人生のコミット：やると言ったことを</span>
                         <div class="completion-buttons">
                             <button class="completion-btn" onclick="setCompletion('life', true)">やった</button>
                             <button class="completion-btn" onclick="setCompletion('life', false)">やらなかった</button>
                         </div>
                     </div>
                     <div class="completion-item">
-                        <span class="completion-label">やると言ったことを<br>貢献のコミット</span>
+                        <span class="completion-label">貢献のコミット：やると言ったことを</span>
                         <div class="completion-buttons">
                             <button class="completion-btn" onclick="setCompletion('contribution', true)">やった</button>
-                            <button class="completion-btn" onclick="setCompletion('contribution', false)">やらなかった</button>
+                            <button class="completion-btn"
+                                onclick="setCompletion('contribution', false)">やらなかった</button>
                         </div>
                     </div>
                 </div>
-                <button class="btn btn-primary" onclick="saveCompletion()">完了を記録</button>
+                <button class="btn btn-primary btn-weekly" onclick="saveCompletion()">完了を記録</button>
             </section>
 
-            <!-- Calendar -->
             <div class="calendar-section">
                 <div class="calendar-header">
-                    <button class="calendar-nav" onclick="changeMonth(-1)">‹</button>
-                    <div class="calendar-month-display">
+                    <div class="calendar-nav-wrapper">
+                        <button class="calendar-nav" onclick="changeMonth(-1)">‹</button>
                         <h2 class="calendar-month" id="calendarMonth"></h2>
-                        <span class="calendar-total" id="calendarTotal">TOTAL: 0回</span>
+                        <button class="calendar-nav" onclick="changeMonth(1)">›</button>
                     </div>
-                    <button class="calendar-nav" onclick="changeMonth(1)">›</button>
+                    <div class="calendar-stats">
+                        <span class="calendar-total" id="calendarTotal">完了: 0日</span>
+                        <span> / </span>
+                        <span id="calendarRate">0日</span>
+                    </div>
                 </div>
 
-                <div class="calendar-grid">
-                    <div class="calendar-day-header sunday">日</div>
-                    <div class="calendar-day-header">月</div>
-                    <div class="calendar-day-header">火</div>
-                    <div class="calendar-day-header">水</div>
-                    <div class="calendar-day-header">木</div>
-                    <div class="calendar-day-header">金</div>
-                    <div class="calendar-day-header saturday">土</div>
-                    <div id="calendarDays"></div>
+                <div class="calendar-container">
+                    <div class="calendar-weekdays">
+                        <div class="saturday">土</div>
+                        <div class="sunday">日</div>
+                        <div>月</div>
+                        <div>火</div>
+                        <div>水</div>
+                        <div>木</div>
+                        <div>金</div>
+                    </div>
+                    <div class="calendar-days-grid" id="calendarDays"></div>
                 </div>
+
+                <div class="calendar-legend">
+                    👑👑 = 両方やった　｜　👑 = 1つやった　｜　○ = 記録済(やらなかった)　｜　★ = 週間完了
+                </div>
+            </div>
+
+            <div
+                style="text-align: center; margin-top: 2rem; margin-bottom: 2rem; border-top: 1px solid #eee; padding-top: 2rem; display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 1rem; flex-wrap: wrap;">
+
+                <button class="btn" onclick="openExportModal()"
+                    style="display: inline-block; width: auto; min-width: 140px; padding: 0.5rem 1.2rem; font-size: 0.85rem; font-weight: bold; background: #4CAF50; color: white; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-top:0;">📊
+                    データ出力</button>
+
+                <button class="usage-btn" onclick="openUsageModal()"
+                    style="display: inline-block; position: static; color: #E65100; background: #FFF3E0; border: 1px solid #FFB74D; font-weight: bold; font-size: 0.85rem; padding: 0.5rem 1.2rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">⚠️
+                    ご利用上の注意</button>
             </div>
         </div>
     </div>
 
-    <!-- Breakdown Modal -->
     <div class="modal" id="breakdownModal">
         <div class="modal-content">
-            <h3 class="modal-title">ブレイクダウン宣言</h3>
+            <h3 class="modal-title">ブレークダウンの承認</h3>
             <div class="breakdown-text">
                 私はやると言った事をやりませんでした。<br>
-                私は私の言葉ではありませんでした。そしてそれ以上の意味はありません。<br>
+                私は私の言葉ではありませんでした。そしてそれ以上の意味はありません<br>
                 ブレイクダウンとインテグリティアウトを私は承認します。<br>
-                そして私はパワフルです。
+                そして私はパワフルです
             </div>
             <button class="modal-btn" onclick="closeBreakdownModal()">承認する</button>
         </div>
     </div>
 
-    <!-- Declaration Settings Modal -->
     <div class="modal" id="declarationModal">
         <div class="modal-content">
             <h3 class="modal-title">宣言の編集</h3>
-            
+
             <div class="current-declaration" id="currentDeclaration1Display">
-                <div class="declaration-period-badge" id="currentPeriodBadge">期間未設定</div>
-                <div style="margin-bottom: 1rem;">
+                <div style="margin-bottom: 0.75rem;">
                     <strong>現在の宣言1:</strong><br>
                     <div id="currentDeclaration1TextDisplay" style="margin-top: 0.5rem; white-space: pre-line;">
                         未設定
@@ -730,505 +259,226 @@ textarea.input-field {
                 </div>
             </div>
 
-            <h4 style="margin-bottom: 1rem; font-weight: 700;">宣言1を編集</h4>
-            
-            <div class="declaration-period">
-                <div class="input-group">
-                    <label class="input-label">開始日</label>
-                    <input type="date" class="input-field" id="declaration1Start">
-                </div>
-                <div class="input-group">
-                    <label class="input-label">終了日</label>
-                    <input type="date" class="input-field" id="declaration1End">
-                </div>
-            </div>
+            <h4 style="margin-bottom: 0.75rem; font-weight: 700;">宣言1を編集</h4>
 
             <div class="input-group">
                 <label class="input-label">宣言1の内容</label>
-                <textarea class="input-field" id="declaration1Input" placeholder="例：私たちICLP25は&#10;愛と感謝で無限の可能性を貢献するリーダーのチームです" rows="4"></textarea>
+                <textarea class="input-field" id="declaration1Input" rows="4"></textarea>
             </div>
 
-            <button class="modal-btn" onclick="saveDeclaration1()">保存</button>
+            <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 2px solid var(--border);">
+                <h4 style="margin-bottom: 0.75rem; font-weight: 700;">宣言2を編集</h4>
+
+                <div class="current-declaration"
+                    style="background: linear-gradient(135deg, #FFF5F0 0%, #FFEDE0 100%); border-color: var(--primary);">
+                    <div style="margin-bottom: 0.75rem;">
+                        <strong>現在の宣言2:</strong><br>
+                        <div id="currentDeclaration2TextDisplay" style="margin-top: 0.5rem; white-space: pre-line;">
+                            私は重要です。私は違いを創る人です。私が違いを創るために手放すものは＿＿です。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">宣言2の内容</label>
+                    <textarea class="input-field" id="declaration2Input" rows="3"
+                        placeholder="例：私は重要です。私は違いを創る人です。私が違いを創るために手放すものは＿＿です。"></textarea>
+                    <div style="font-size: 0.8rem; color: #666; margin-top: 0.25rem;">
+                        ※「＿＿」の部分に毎日入力する欄が表示されます
+                    </div>
+                </div>
+            </div>
+
+            <button class="modal-btn" onclick="saveDeclarations()">保存</button>
             <button class="modal-btn modal-btn-secondary" onclick="closeDeclarationSettings()">キャンセル</button>
         </div>
     </div>
 
-    <!-- Toast Notification -->
+    <div class="modal" id="editDayModal">
+        <div class="modal-content">
+            <h3 class="modal-title">記録を編集</h3>
+            <div class="edit-date-display" id="editDateDisplay"></div>
+
+            <div class="input-group">
+                <label class="input-label">貢献するもの</label>
+                <input type="text" class="input-field" id="editHeroContribution">
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">手放すもの</label>
+                <input type="text" class="input-field" id="editHandOver">
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">人生のコミット</label>
+                <div class="commit-list" id="editLifeCommitList"></div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">誰に・意図（貢献のコミット）</label>
+                <textarea class="input-field auto-resize" id="editContributionContent"></textarea>
+            </div>
+
+            <div class="completion-grid" style="margin-top: 0.75rem;">
+                <div class="completion-item">
+                    <span class="completion-label">人生のコミット：やると言ったことを</span>
+                    <div class="completion-buttons">
+                        <button class="completion-btn" onclick="setEditCompletion('life', true)">やった</button>
+                        <button class="completion-btn" onclick="setEditCompletion('life', false)">やらなかった</button>
+                    </div>
+                </div>
+                <div class="completion-item">
+                    <span class="completion-label">貢献のコミット：やると言ったことを</span>
+                    <div class="completion-buttons">
+                        <button class="completion-btn" onclick="setEditCompletion('contribution', true)">やった</button>
+                        <button class="completion-btn"
+                            onclick="setEditCompletion('contribution', false)">やらなかった</button>
+                    </div>
+                </div>
+            </div>
+
+            <button class="modal-btn" onclick="saveEditedDay()">保存</button>
+            <button class="modal-btn modal-btn-secondary" onclick="closeEditDayModal()">キャンセル</button>
+        </div>
+    </div>
+
+    <div class="modal" id="editWeeklyModal">
+        <div class="modal-content">
+            <h3 class="modal-title" id="saturdayModalTitle" style="color: var(--blue);">📅 土曜日の記録を編集</h3>
+            <div class="edit-date-display" id="editWeeklyDateDisplay" style="background: #E3F2FD; color: var(--blue);">
+            </div>
+
+            <div class="saturday-tabs">
+                <button class="saturday-tab active" id="tabWeekly" onclick="switchSaturdayTab('weekly')">📅
+                    週間コミット</button>
+                <button class="saturday-tab daily" id="tabDaily" onclick="switchSaturdayTab('daily')">📝 1日コミット</button>
+            </div>
+
+            <div class="saturday-page active" id="pageWeekly">
+                <div class="input-group">
+                    <label class="input-label">人生のコミット（今週やること）</label>
+                    <div class="commit-list" id="editWeeklyLifeCommitList"></div>
+                    <button class="btn-add" onclick="addEditWeeklyLifeCommit()">+ コミットを追加</button>
+                </div>
+
+                <div class="input-group" style="margin-top: 1rem;">
+                    <label class="input-label">貢献のコミット（誰に・意図）</label>
+                    <textarea class="input-field auto-resize" id="editWeeklyContributionContent"></textarea>
+                </div>
+
+                <div class="completion-grid" style="margin-top: 0.75rem;">
+                    <div class="completion-item">
+                        <span class="completion-label">人生のコミット：やると言ったことを</span>
+                        <div class="completion-buttons">
+                            <button class="completion-btn" onclick="setEditWeeklyCompletion('life', true)">やった</button>
+                            <button class="completion-btn"
+                                onclick="setEditWeeklyCompletion('life', false)">やらなかった</button>
+                        </div>
+                    </div>
+                    <div class="completion-item">
+                        <span class="completion-label">貢献のコミット：やると言ったことを</span>
+                        <div class="completion-buttons">
+                            <button class="completion-btn"
+                                onclick="setEditWeeklyCompletion('contribution', true)">やった</button>
+                            <button class="completion-btn"
+                                onclick="setEditWeeklyCompletion('contribution', false)">やらなかった</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="modal-btn btn-weekly" onclick="saveEditedWeeklyCommit()">週間コミットを保存</button>
+            </div>
+
+            <div class="saturday-page" id="pageDaily">
+                <div class="input-group">
+                    <label class="input-label">手放すもの</label>
+                    <input type="text" class="input-field" id="editSaturdayHandOver">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">人生のコミット（今日やること）</label>
+                    <div class="commit-list" id="editSaturdayLifeCommitList"></div>
+                    <button class="btn-add" onclick="addEditSaturdayLifeCommit()">+ コミットを追加</button>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">貢献のコミット（誰に・意図）</label>
+                    <textarea class="input-field auto-resize" id="editSaturdayContributionContent"></textarea>
+                </div>
+
+                <div class="completion-grid" style="margin-top: 0.75rem;">
+                    <div class="completion-item">
+                        <span class="completion-label">人生のコミット：やると言ったことを</span>
+                        <div class="completion-buttons">
+                            <button class="completion-btn"
+                                onclick="setEditSaturdayCompletion('life', true)">やった</button>
+                            <button class="completion-btn"
+                                onclick="setEditSaturdayCompletion('life', false)">やらなかった</button>
+                        </div>
+                    </div>
+                    <div class="completion-item">
+                        <span class="completion-label">貢献のコミット：やると言ったことを</span>
+                        <div class="completion-buttons">
+                            <button class="completion-btn"
+                                onclick="setEditSaturdayCompletion('contribution', true)">やった</button>
+                            <button class="completion-btn"
+                                onclick="setEditSaturdayCompletion('contribution', false)">やらなかった</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="modal-btn btn-primary" onclick="saveEditedSaturdayDaily()">1日コミットを保存</button>
+            </div>
+
+            <button class="modal-btn modal-btn-secondary" onclick="closeEditWeeklyModal()"
+                style="margin-top: 0.5rem;">閉じる</button>
+        </div>
+    </div>
+
+    <div class="modal" id="usageModal">
+        <div class="modal-content">
+            <h3 class="modal-title">ご利用上の注意</h3>
+            <div class="usage-note-content">
+                <div class="usage-note-section">
+                    <div class="usage-note-title">①データは端末内にのみ保存されます</div>
+                    <p>入力した内容はご利用のデバイス（スマホ・タブレット・PC）にのみ保存され、外部サーバーへ送信されることはありません。第三者に見られる心配はありませんのでご安心ください。</p>
+                </div>
+                <div class="usage-note-section">
+                    <div class="usage-note-title">②オフラインでも利用可能です</div>
+                    <p>インターネット通信を行わないため、機内モード等のオフライン環境でもご利用いただけます。</p>
+                </div>
+                <div class="usage-note-section">
+                    <div class="usage-note-title">③デバイス間の同期はできません</div>
+                    <p>データは端末ごとに保存されます。スマートフォンで入力した内容をパソコンで見る（同期する）ことはできませんのでご注意ください。</p>
+                </div>
+            </div>
+            <button class="modal-btn" onclick="closeUsageModal()">閉じる</button>
+        </div>
+    </div>
+
+    <div class="modal" id="exportModal">
+        <div class="modal-content">
+            <h3 class="modal-title">データ出力</h3>
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <button class="btn" onclick="copyAllData()"
+                    style="background: #4CAF50; color: white; margin-bottom: 1rem; width: 100%;">📋 全データをコピー
+                    (スマホ用)</button>
+                <div
+                    style="text-align: left; font-size: 0.9rem; color: #555; background: #f5f5f5; padding: 1rem; border-radius: 8px;">
+                    <strong>【ご利用方法】</strong><br>
+                    ①上のボタンを押すと全データがコピーされます。<br>
+                    ②Googleスプレッドシート等のアプリを開いてください。<br>
+                    ③A1セルを選択して「貼り付け」をすると完了です。<br>
+                    ※PCでも同様に使えます。
+                </div>
+            </div>
+            <button class="modal-btn" onclick="closeExportModal()">閉じる</button>
+        </div>
+    </div>
+
     <div class="toast" id="toast"></div>
 
-    <script>
-        // ICLP Events
-        const ICLP_EVENTS = [
-            { name: "第5週末", date: "2025-12-13" },
-            { name: "ワークデー", date: "2026-01-04" },
-            { name: "第6週末", date: "2026-02-07" },
-            { name: "ワークデー", date: "2026-03-08" },
-            { name: "第7週末", date: "2026-04-11" },
-            { name: "第8週末", date: "2026-05-09" },
-            { name: "完了セッション", date: "2026-06-19" }
-        ];
-
-        const COMPLETION_DATE = "2026-06-19";
-
-        // Data Storage
-        let currentDate = new Date();
-        let viewDate = new Date();
-        let completionState = {
-            life: null,
-            contribution: null
-        };
-        let breakdownShown = {
-            life: false,
-            contribution: false
-        };
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            updateCurrentDate();
-            updateCountdown();
-            loadDeclaration1();
-            loadTodayData();
-            renderCalendar();
-        });
-
-        // Update Current Date
-        function updateCurrentDate() {
-            const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth() + 1;
-            const day = currentDate.getDate();
-            const weekday = weekdays[currentDate.getDay()];
-            
-            document.getElementById('currentDate').textContent = 
-                `${year}年${month}月${day}日(${weekday})`;
-        }
-
-        // Update Countdown
-        function updateCountdown() {
-            const today = formatDate(currentDate);
-            
-            // Find next event
-            const nextEvent = ICLP_EVENTS.find(event => event.date >= today);
-            
-            if (nextEvent) {
-                const daysUntil = calculateDaysDiff(today, nextEvent.date);
-                document.getElementById('nextEventCountdown').textContent = 
-                    `${nextEvent.name}まで: あと${daysUntil}日`;
-            }
-            
-            // Days until completion
-            const daysUntilCompletion = calculateDaysDiff(today, COMPLETION_DATE);
-            document.getElementById('completionCountdown').textContent = 
-                `完了日まで: あと${daysUntilCompletion}日`;
-        }
-
-        // Calculate Days Difference
-        function calculateDaysDiff(date1, date2) {
-            const d1 = new Date(date1);
-            const d2 = new Date(date2);
-            const diffTime = d2 - d1;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            return diffDays;
-        }
-
-        // Format Date
-        function formatDate(date) {
-            return date.toISOString().split('T')[0];
-        }
-
-        // Get Data from LocalStorage
-        function getData() {
-            const data = localStorage.getItem('iclpData');
-            return data ? JSON.parse(data) : { 
-                declaration1: null,
-                dailyCommits: {} 
-            };
-        }
-
-        // Save Data to LocalStorage
-        function saveData(data) {
-            // Clean old data (older than 180 days)
-            const cutoffDate = new Date();
-            cutoffDate.setDate(cutoffDate.getDate() - 180);
-            const cutoffStr = formatDate(cutoffDate);
-            
-            Object.keys(data.dailyCommits).forEach(date => {
-                if (date < cutoffStr) {
-                    delete data.dailyCommits[date];
-                }
-            });
-            
-            localStorage.setItem('iclpData', JSON.stringify(data));
-        }
-
-        // Load Declaration 1
-        function loadDeclaration1() {
-            const data = getData();
-            const today = formatDate(currentDate);
-            
-            if (data.declaration1 && 
-                data.declaration1.startDate <= today && 
-                data.declaration1.endDate >= today) {
-                document.getElementById('declaration1Text').textContent = data.declaration1.text;
-            } else {
-                document.getElementById('declaration1Text').textContent = '宣言を設定してください';
-            }
-        }
-
-        // Open Declaration Settings
-        function openDeclarationSettings() {
-            const data = getData();
-            
-            if (data.declaration1) {
-                document.getElementById('currentPeriodBadge').textContent = 
-                    `${data.declaration1.startDate} 〜 ${data.declaration1.endDate}`;
-                document.getElementById('currentDeclaration1TextDisplay').textContent = 
-                    data.declaration1.text;
-                document.getElementById('declaration1Start').value = data.declaration1.startDate;
-                document.getElementById('declaration1End').value = data.declaration1.endDate;
-                document.getElementById('declaration1Input').value = data.declaration1.text;
-            } else {
-                document.getElementById('currentPeriodBadge').textContent = '期間未設定';
-                document.getElementById('currentDeclaration1TextDisplay').textContent = '未設定';
-                document.getElementById('declaration1Start').value = '';
-                document.getElementById('declaration1End').value = '';
-                document.getElementById('declaration1Input').value = '';
-            }
-            
-            document.getElementById('declarationModal').classList.add('show');
-        }
-
-        // Close Declaration Settings
-        function closeDeclarationSettings() {
-            document.getElementById('declarationModal').classList.remove('show');
-        }
-
-        // Save Declaration 1
-        function saveDeclaration1() {
-            const startDate = document.getElementById('declaration1Start').value;
-            const endDate = document.getElementById('declaration1End').value;
-            const text = document.getElementById('declaration1Input').value.trim();
-            
-            if (!startDate || !endDate || !text) {
-                showToast('すべての項目を入力してください');
-                return;
-            }
-            
-            if (startDate > endDate) {
-                showToast('終了日は開始日より後にしてください');
-                return;
-            }
-            
-            const data = getData();
-            data.declaration1 = {
-                text: text,
-                startDate: startDate,
-                endDate: endDate
-            };
-            
-            saveData(data);
-            loadDeclaration1();
-            closeDeclarationSettings();
-            showToast('宣言1を保存しました！');
-        }
-
-        // Add Life Commit
-        function addLifeCommit() {
-            const list = document.getElementById('lifeCommitList');
-            const newItem = document.createElement('div');
-            newItem.className = 'commit-item';
-            newItem.innerHTML = `
-                <textarea class="input-field" placeholder="やりたいこと・やるべきこと"></textarea>
-                <button class="btn-remove" onclick="removeLifeCommit(this)">削除</button>
-            `;
-            list.appendChild(newItem);
-        }
-
-        // Remove Life Commit
-        function removeLifeCommit(button) {
-            const list = document.getElementById('lifeCommitList');
-            if (list.children.length > 1) {
-                button.parentElement.remove();
-            } else {
-                showToast('最低1つのコミットは必要です');
-            }
-        }
-
-        // Load Today's Data
-        function loadTodayData() {
-            const data = getData();
-            const todayKey = formatDate(currentDate);
-            const todayData = data.dailyCommits[todayKey];
-            
-            if (todayData) {
-                document.getElementById('handOver').value = todayData.handOver || '';
-                document.getElementById('contributionWho').value = todayData.contributionWho || '';
-                document.getElementById('contributionIntent').value = todayData.contributionIntent || '';
-                
-                // Load life commits
-                const list = document.getElementById('lifeCommitList');
-                list.innerHTML = '';
-                
-                if (todayData.lifeCommit && todayData.lifeCommit.length > 0) {
-                    todayData.lifeCommit.forEach((commit, index) => {
-                        const item = document.createElement('div');
-                        item.className = 'commit-item';
-                        item.innerHTML = `
-                            <textarea class="input-field" placeholder="やりたいこと・やるべきこと">${commit}</textarea>
-                            ${index > 0 ? '<button class="btn-remove" onclick="removeLifeCommit(this)">削除</button>' : ''}
-                        `;
-                        list.appendChild(item);
-                    });
-                } else {
-                    list.innerHTML = `
-                        <div class="commit-item">
-                            <textarea class="input-field" placeholder="例：新規顧客3社に提案する"></textarea>
-                        </div>
-                    `;
-                }
-                
-                // Load completion state
-                if (todayData.lifeCompleted !== undefined) {
-                    completionState.life = todayData.lifeCompleted;
-                    updateCompletionButton('life', todayData.lifeCompleted);
-                }
-                
-                if (todayData.contributionCompleted !== undefined) {
-                    completionState.contribution = todayData.contributionCompleted;
-                    updateCompletionButton('contribution', todayData.contributionCompleted);
-                }
-            }
-        }
-
-        // Save Commits
-        function saveCommits() {
-            const handOver = document.getElementById('handOver').value.trim();
-            const contributionWho = document.getElementById('contributionWho').value.trim();
-            const contributionIntent = document.getElementById('contributionIntent').value.trim();
-            
-            // Collect life commits
-            const lifeCommits = [];
-            document.querySelectorAll('#lifeCommitList textarea').forEach(textarea => {
-                const value = textarea.value.trim();
-                if (value) {
-                    lifeCommits.push(value);
-                }
-            });
-            
-            if (lifeCommits.length === 0) {
-                showToast('最低1つの人生のコミットを入力してください');
-                return;
-            }
-            
-            const data = getData();
-            const todayKey = formatDate(currentDate);
-            
-            if (!data.dailyCommits[todayKey]) {
-                data.dailyCommits[todayKey] = {};
-            }
-            
-            data.dailyCommits[todayKey].handOver = handOver;
-            data.dailyCommits[todayKey].lifeCommit = lifeCommits;
-            data.dailyCommits[todayKey].contributionWho = contributionWho;
-            data.dailyCommits[todayKey].contributionIntent = contributionIntent;
-            data.dailyCommits[todayKey].timestamp = new Date().toISOString();
-            
-            saveData(data);
-            showToast('コミットを保存しました！');
-        }
-
-        // Set Completion
-        function setCompletion(type, value) {
-            completionState[type] = value;
-            updateCompletionButton(type, value);
-            
-            // Show breakdown modal if "やらなかった" is selected
-            if (value === false && !breakdownShown[type]) {
-                showBreakdownModal();
-                breakdownShown[type] = true;
-            }
-        }
-
-        // Update Completion Button
-        function updateCompletionButton(type, value) {
-            const completionItems = document.querySelectorAll('.completion-item');
-            const targetItem = type === 'life' ? completionItems[0] : completionItems[1];
-            const buttons = targetItem.querySelectorAll('.completion-btn');
-            
-            buttons.forEach(btn => {
-                btn.classList.remove('selected-yes', 'selected-no');
-            });
-            
-            if (value === true) {
-                buttons[0].classList.add('selected-yes');
-            } else if (value === false) {
-                buttons[1].classList.add('selected-no');
-            }
-        }
-
-        // Show Breakdown Modal
-        function showBreakdownModal() {
-            document.getElementById('breakdownModal').classList.add('show');
-        }
-
-        // Close Breakdown Modal
-        function closeBreakdownModal() {
-            document.getElementById('breakdownModal').classList.remove('show');
-        }
-
-        // Save Completion
-        function saveCompletion() {
-            if (completionState.life === null || completionState.contribution === null) {
-                showToast('両方の完了状態を選択してください');
-                return;
-            }
-            
-            const data = getData();
-            const todayKey = formatDate(currentDate);
-            
-            if (!data.dailyCommits[todayKey]) {
-                showToast('先にコミットを保存してください');
-                return;
-            }
-            
-            data.dailyCommits[todayKey].lifeCompleted = completionState.life;
-            data.dailyCommits[todayKey].contributionCompleted = completionState.contribution;
-            data.dailyCommits[todayKey].completionTimestamp = new Date().toISOString();
-            
-            saveData(data);
-            showToast('完了を記録しました！');
-            
-            // Reset breakdown shown flags for next time
-            breakdownShown = { life: false, contribution: false };
-            
-            // Refresh calendar
-            renderCalendar();
-        }
-
-        // Calendar Functions
-        function changeMonth(direction) {
-            viewDate.setMonth(viewDate.getMonth() + direction);
-            renderCalendar();
-        }
-
-        function renderCalendar() {
-    const year = viewDate.getFullYear();
-    const month = viewDate.getMonth();
-
-    // Year Month Header
-    document.getElementById('calendarMonth').textContent = `${year}年 ${month + 1}月`;
-
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const daysInMonth = lastDay.getDate();
-    const startDayOfWeek = firstDay.getDay();
-
-    const calendarDays = document.getElementById('calendarDays');
-    calendarDays.innerHTML = '';
-
-    // Empty cells for padding
-    for (let i = 0; i < startDayOfWeek; i++) {
-        const emptyDay = document.createElement('div');
-        emptyDay.className = 'calendar-day empty';
-        calendarDays.appendChild(emptyDay);
-    }
-
-    const data = getData();
-    const today = formatDate(currentDate);
-    let monthTotal = 0;
-
-    for (let day = 1; day <= daysInMonth; day++) {
-        const date = new Date(year, month, day);
-        const dateKey = formatDate(date);
-        const dayData = data.dailyCommits[dateKey];
-
-        // Main Cell
-        const dayElement = document.createElement('div');
-        dayElement.className = 'calendar-day';
-        dayElement.onclick = () => showDayDetail(dateKey);
-
-        // --- 1. Background Bubble (Life Commit) ---
-        const bubble = document.createElement('div');
-        bubble.className = 'status-bubble';
-        const isLifeDone = dayData?.lifeCompleted === true;
-
-        if (isLifeDone) {
-            bubble.classList.add('active'); // CSS handles the style
-            dayElement.classList.add('life-done'); // For text color change
-            monthTotal++;
-        }
-        dayElement.appendChild(bubble);
-
-        // --- 2. Date Number ---
-        const numberSpan = document.createElement('span');
-        numberSpan.className = 'day-number';
-        numberSpan.textContent = day;
-        dayElement.appendChild(numberSpan);
-
-        // Today Highlight
-        if (dateKey === today) {
-            dayElement.classList.add('today');
-        }
-
-        // --- 3. Contribution Dot (Bottom Right) ---
-        const isContributionDone = dayData?.contributionCompleted === true;
-        if (isContributionDone) {
-            const dot = document.createElement('div');
-            dot.className = 'status-dot';
-            dayElement.appendChild(dot);
-        }
-
-        calendarDays.appendChild(dayElement);
-    }
-
-    // Update Total Badge
-    document.getElementById('calendarTotal').textContent = `TOTAL: ${monthTotal}回`;
-}
-
-回`;
-        }
-
-        function showDayDetail(dateKey) {
-            const data = getData();
-            const dayData = data.dailyCommits[dateKey];
-            
-            if (!dayData) {
-                showToast('この日の記録はありません');
-                return;
-            }
-            
-            const lifeCommitText = dayData.lifeCommit?.join('\n・ ') || 'なし';
-            const message = `【${dateKey}】
-
-手放すもの: ${dayData.handOver || 'なし'}
-
-人生のコミット:
-・ ${lifeCommitText}
-
-貢献のコミット:
-誰に: ${dayData.contributionWho || 'なし'}
-何を: ${dayData.contributionIntent || 'なし'}
-
-完了: 人生${dayData.lifeCompleted ? '○' : '×'} / 貢献${dayData.contributionCompleted ? '○' : '×'}`;
-            
-            alert(message);
-        }
-
-        // Toast
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-    </script>
+<script src="app.js" defer></script>
 </body>
+
 </html>
-
-
-
-
-
